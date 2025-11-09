@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポモドーロタイマー</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- ミニタイマー -->
+    <div id="mini-timer" class="mini-timer" style="display: none;">
+        <div class="mini-header">
+            <span class="mini-title">🍅 ポモドーロ</span>
+            <div class="mini-controls">
+                <button id="mini-expand-btn" class="mini-btn" title="通常モードに戻る">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <button id="mini-close-btn" class="mini-btn" title="ミニモードを閉じる">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="mini-content">
+            <div class="mini-timer-display">
+                <div id="mini-time" class="mini-time">25:00</div>
+                <div id="mini-mode" class="mini-mode">計画的</div>
+            </div>
+            
+            <div class="mini-progress">
+                <div id="mini-progress-bar" class="mini-progress-bar"></div>
+            </div>
+            
+            <div class="mini-buttons">
+                <button id="mini-start-btn" class="mini-control-btn start">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button id="mini-reset-btn" class="mini-control-btn reset">
+                    <i class="fas fa-refresh"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="mini-current-task" id="mini-current-task">
+            タスクが選択されていません
+        </div>
+    </div>
+
+    <div class="container" id="main-container">
+        <header>
+            <h1><i class="fas fa-tomato"></i> ポモドーロタイマー</h1>
+            <div class="header-controls">
+                <button id="mini-mode-btn" class="header-btn" title="ミニモード">
+                    <i class="fas fa-compress"></i>
+                </button>
+                <button id="always-on-top-btn" class="header-btn" title="常に最前面">
+                    <i class="fas fa-thumbtack"></i>
+                </button>
+                <button id="fullscreen-btn" class="header-btn" title="フルスクリーン">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <!-- タイマー表示部 -->
+            <section class="timer-section">
+                <!-- モード選択 -->
+                <div class="mode-selection">
+                    <h3>作業モード</h3>
+                    <div class="mode-buttons">
+                        <button id="planned-mode-btn" class="mode-btn active" data-mode="planned">
+                            <i class="fas fa-calendar-check"></i> 計画的遂行
+                        </button>
+                        <button id="unplanned-mode-btn" class="mode-btn" data-mode="unplanned">
+                            <i class="fas fa-clock"></i> 無計画遂行（だらだら）
+                        </button>
+                    </div>
+                </div>
+
+                <div class="timer-display">
+                    <div id="timer-circle" class="timer-circle">
+                        <div id="time-display" class="time-display">25:00</div>
+                        <div id="timer-label" class="timer-label">作業時間</div>
+                        <div id="mode-indicator" class="mode-indicator">計画的</div>
+                    </div>
+                </div>
+                
+                <div class="timer-controls">
+                    <button id="start-btn" class="control-btn start-btn">
+                        <i class="fas fa-play"></i> スタート
+                    </button>
+                    <button id="reset-btn" class="control-btn reset-btn">
+                        <i class="fas fa-refresh"></i> リセット
+                    </button>
+                </div>
+            </section>
+
+            <!-- タスク管理部 -->
+            <section class="task-section">
+                <div class="task-tabs">
+                    <button class="task-tab-btn active" data-tab="today">今日のタスク</button>
+                    <button class="task-tab-btn" data-tab="stock">仕掛けストック</button>
+                </div>
+
+                <!-- 今日のタスクタブ -->
+                <div id="today-tasks" class="task-tab-content active">
+                    <div class="task-input-area">
+                        <textarea id="task-input" placeholder="タスクを入力してください（改行で新しいタスクを追加）"></textarea>
+                        <button id="add-tasks-btn" class="add-btn">
+                            <i class="fas fa-plus"></i> タスク追加
+                        </button>
+                    </div>
+                    
+                    <ul id="task-list" class="task-list"></ul>
+                </div>
+
+                <!-- 仕掛けストックタブ -->
+                <div id="stock-tasks" class="task-tab-content">
+                    <div class="task-input-area">
+                        <textarea id="stock-input" placeholder="思いついた仕掛けタスクをストック（改行で複数追加）"></textarea>
+                        <button id="add-stock-btn" class="add-btn">
+                            <i class="fas fa-lightbulb"></i> ストック追加
+                        </button>
+                    </div>
+                    
+                    <div class="stock-actions">
+                        <button id="move-to-today-btn" class="control-btn">
+                            <i class="fas fa-arrow-right"></i> 選択したタスクを今日に移動
+                        </button>
+                    </div>
+                    
+                    <ul id="stock-list" class="task-list stock-list"></ul>
+                </div>
+            </section>
+
+            <!-- 統計・ログ部 -->
+            <section class="stats-section">
+                <div class="stats-tabs">
+                    <button class="tab-btn active" data-tab="today">今日</button>
+                    <button class="tab-btn" data-tab="log">ログ</button>
+                    <button class="tab-btn" data-tab="dashboard">ダッシュボード</button>
+                </div>
+
+                <div id="today-tab" class="tab-content active">
+                    <div class="daily-summary">
+                        <div class="stat-card">
+                            <div class="stat-value" id="completed-pomodoros">0</div>
+                            <div class="stat-label">完了ポモドーロ</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-focus-time">0分</div>
+                            <div class="stat-label">総集中時間</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="completed-tasks">0</div>
+                            <div class="stat-label">完了タスク</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mode-comparison">
+                        <h3>作業モード比較</h3>
+                        <div class="comparison-cards">
+                            <div class="comparison-card planned">
+                                <div class="comparison-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="comparison-stats">
+                                    <div class="comparison-value" id="planned-pomodoros">0</div>
+                                    <div class="comparison-label">計画的ポモドーロ</div>
+                                    <div class="comparison-time" id="planned-time">0分</div>
+                                </div>
+                            </div>
+                            <div class="comparison-card unplanned">
+                                <div class="comparison-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="comparison-stats">
+                                    <div class="comparison-value" id="unplanned-pomodoros">0</div>
+                                    <div class="comparison-label">無計画ポモドーロ</div>
+                                    <div class="comparison-time" id="unplanned-time">0分</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="efficiency-indicator">
+                            <div class="efficiency-bar">
+                                <div id="efficiency-fill" class="efficiency-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="efficiency-text">
+                                計画性: <span id="efficiency-percentage">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="log-tab" class="tab-content">
+                    <div id="activity-log" class="activity-log"></div>
+                </div>
+
+                <div id="dashboard-tab" class="tab-content">
+                    <canvas id="productivity-chart" width="400" height="400"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="redmine-integration.js"></script>
+</body>
+</html>

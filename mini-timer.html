@@ -1,0 +1,38 @@
+<!-- ミニモード用の小さなウィンドウ -->
+<div id="mini-timer" class="mini-timer" style="display: none;">
+    <div class="mini-header">
+        <span class="mini-title">🍅 ポモドーロ</span>
+        <div class="mini-controls">
+            <button id="mini-expand-btn" class="mini-btn" title="通常モードに戻る">
+                <i class="fas fa-expand"></i>
+            </button>
+            <button id="mini-close-btn" class="mini-btn" title="ミニモードを閉じる">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="mini-content">
+        <div class="mini-timer-display">
+            <div id="mini-time" class="mini-time">25:00</div>
+            <div id="mini-mode" class="mini-mode">計画的</div>
+        </div>
+        
+        <div class="mini-progress">
+            <div id="mini-progress-bar" class="mini-progress-bar"></div>
+        </div>
+        
+        <div class="mini-buttons">
+            <button id="mini-start-btn" class="mini-control-btn start">
+                <i class="fas fa-play"></i>
+            </button>
+            <button id="mini-reset-btn" class="mini-control-btn reset">
+                <i class="fas fa-refresh"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="mini-current-task" id="mini-current-task">
+        タスクが選択されていません
+    </div>
+</div>
