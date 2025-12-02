@@ -17,7 +17,9 @@ It runs silently in the background, creating daily log files in CSV format. An a
 
 ## 3. File Descriptions
 
-- `pc_activity_logger.py`: The main application that performs the background logging.
+- `unified_logger.py`: The main application (CLI/Desktop) that integrates Pomodoro timer and activity logging.
+- `pomodoro.py`: The Pomodoro timer logic module.
+- `pc_activity_logger.py`: (Deprecated) The previous background logging application.
 - `analyze_logs.py`: A command-line tool to analyze the generated log files.
 - `requirements.txt`: A list of the required Python libraries for the project.
 - `install_startup.bat`: A script to create a shortcut in the Windows startup folder, enabling the logger to run automatically on login.
@@ -40,22 +42,31 @@ It runs silently in the background, creating daily log files in CSV format. An a
 
 ### 5.1. Starting the Logger
 
-There are two ways to start the logger:
+There are two ways to start the unified logger:
 
-- **Manual Start**: To run the logger in the background, execute the following command in the project directory:
+- **Manual Start**: To run the logger, execute the following command in the project directory:
   ```bash
-  pythonw.exe pc_activity_logger.py
+  python unified_logger.py
   ```
-  Using `pythonw.exe` ensures no console window will appear. You will see a new icon in your system tray.
+  This will start the application. A system tray icon will appear.
+  *Note*: Since this version supports console input for tasks, running with `python.exe` (with console) is recommended for now, especially if you want to see the prompts.
 
 - **Automatic Start on Login (Recommended)**:
-  - Run the `install_startup.bat` script by double-clicking it.
-  - This will create a shortcut in your Windows startup folder. The logger will now launch automatically every time you log in.
-  - To stop this behavior, run the `uninstall_startup.bat` script.
+  - **Note**: The current `install_startup.bat` still points to the old `pc_activity_logger.py`. You may need to edit it to point to `unified_logger.py` or run it manually for this phase.
 
 ### 5.2. Controlling the Logger
 
+You can control the logger via Global Hotkeys or the System Tray.
+
+**Hotkeys:**
+- **Start Work (Pomodoro)**: `Ctrl+Shift+S` (You will be prompted to enter a task name in the console)
+- **Start Break**: `Ctrl+Shift+B`
+- **Stop Timer**: `Ctrl+Shift+X`
+- **Pause/Resume Logging**: `Ctrl+Shift+P`
+
+**System Tray:**
 Right-click the logger icon in the system tray to access the menu:
+- **Start Work / Break**: Manually trigger timer states.
 - **Pause/Resume**: Temporarily stop or restart logging.
 - **Exit**: Stop the logger and remove the icon.
 
