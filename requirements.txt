@@ -3,3 +3,4 @@ pywin32
 pystray
 Pillow
 pandas
+keyboard>=0.13.5
