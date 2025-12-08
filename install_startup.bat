@@ -2,9 +2,9 @@
 setlocal
 
 REM --- Configuration ---
-set "PYTHON_SCRIPT_NAME=pc_activity_logger.py"
-set "SHORTCUT_NAME=PC Activity Logger.lnk"
-set "SHORTCUT_DESCRIPTION=Starts the PC Activity Logger to record PC operations."
+set "PYTHON_SCRIPT_NAME=hub_ui.py"
+set "SHORTCUT_NAME=Hub UI.lnk"
+set "SHORTCUT_DESCRIPTION=Starts the Hub UI and Logger."
 REM --- End Configuration ---
 
 REM Get the directory of this batch file, which is assumed to be the project root.
@@ -16,7 +16,7 @@ set "STARTUP_FOLDER=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
 set "SHORTCUT_PATH=%STARTUP_FOLDER%\%SHORTCUT_NAME%"
 
 echo ========================================
-echo  PC Activity Logger Startup Installer
+echo  Hub UI Startup Installer
 echo ========================================
 echo.
 
@@ -78,7 +78,7 @@ if exist "%VBS_SCRIPT%" del "%VBS_SCRIPT%"
 echo.
 echo =================================================================
 echo  SUCCESS!
-echo  The PC Activity Logger is now configured to start automatically
+echo  The Hub UI is now configured to start automatically
 echo  the next time you log in to Windows.
 echo =================================================================
 echo.

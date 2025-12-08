@@ -45,6 +45,7 @@ class UnifiedLogger:
         self.is_running = threading.Event()
         self.is_paused = threading.Event()
         self.icon = None  # To be set by setup_tray
+        self.last_p_state = None # Initialize to avoid AttributeError in first run loop if logic changes
 
     def _get_log_file_path(self):
         today = datetime.now().strftime("%Y%m%d")
@@ -130,21 +131,11 @@ class UnifiedLogger:
             pid, window_title, process_name = self.get_active_window_info()
 
             # Log if window changed OR if pomodoro state changed (maybe?)
-            # Plan says "Active Window Monitoring (5 sec interval)".
-            # Original code logged only when window title changes.
-            # But with pomodoro, we might want to log if state changes too?
-            # For now, stick to window change logic or maybe periodic logging?
-            # Original: `if window_title and window_title != self.last_window_title:`
-            # If I stay in same window for 25 mins, I only get one log entry at start?
-            # That might be insufficient for time tracking if we rely on "duration = next_log_time - current_log_time".
-            # But the original app was like that.
-            # However, if Pomodoro state changes, we definitely want a log entry to mark the boundary.
-
             p_state = self.pomodoro.get_state()
             current_p_state = p_state['state']
 
             # We might need to store last pomodoro state to detect change
-            if not hasattr(self, 'last_p_state'):
+            if self.last_p_state is None:
                 self.last_p_state = current_p_state
 
             if (window_title and window_title != self.last_window_title) or (current_p_state != self.last_p_state):
@@ -152,19 +143,6 @@ class UnifiedLogger:
                 self.last_window_title = window_title
                 self.last_p_state = current_p_state
 
-            # We sleep for CHECK_INTERVAL, but we should probably sleep in smaller chunks to keep timer accurate?
-            # No, `pomodoro.tick()` uses `time.time()` diff, so it handles long sleeps correctly.
-            # But we want to call tick() frequently enough for auto-switch to happen timely.
-            # 5 seconds is okay-ish. 1 second is better for UI updates.
-            # Let's sleep 1 second but only log every 5 seconds?
-            # Or just check window every 5 seconds.
-
-            # Let's change loop to run every 1 second for timer accuracy,
-            # but check window every CHECK_INTERVAL.
-
-            # Actually, let's keep it simple. Sleep 1 second.
-            # But checking window every 1 second might be too much CPU?
-            # psutil/win32 calls are cheap.
             # Let's try 1 second interval.
             time.sleep(1)
 
